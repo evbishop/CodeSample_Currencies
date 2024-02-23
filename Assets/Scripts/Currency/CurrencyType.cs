@@ -1,4 +1,4 @@
-﻿namespace CodeSample_Resources
+﻿namespace CodeSample_Currency.Currency
 {
     public enum CurrencyType : byte
     {
