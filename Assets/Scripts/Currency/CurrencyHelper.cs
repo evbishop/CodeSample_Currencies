@@ -148,8 +148,8 @@ namespace CodeSample_Currency.Currency
         /// If a currency type cannot be converted, it carries over unchanged into the new wallet.
         /// </remarks>
         public Dictionary<CurrencyType, int> PackTreeCurrenciesIntoTwo(
-            Dictionary<CurrencyType, int> wallet,
-            Dictionary<CurrencyType, int> currenciesWorth)
+            in Dictionary<CurrencyType, int> wallet,
+            in Dictionary<CurrencyType, int> currenciesWorth)
         {
             int copperWorth = currenciesWorth[CurrencyType.Copper];
             int silverWorth = currenciesWorth[CurrencyType.Silver];
@@ -171,7 +171,8 @@ namespace CodeSample_Currency.Currency
             var possibleConversionPaths = GetPossibleConversions(
                 totalCopperWorth, totalSilverWorth, totalGoldWorth,
                 copperWorth, silverWorth, goldWorth);
-            ConversionType conversionPath = possibleConversionPaths[Random.Range(0, possibleConversionPaths.Count)];
+            ConversionType conversionPath = possibleConversionPaths
+                [Random.Range(0, possibleConversionPaths.Count)];
 
             Convert(result, conversionPath,
                 totalCopperWorth, totalSilverWorth, totalGoldWorth,
