@@ -10,7 +10,7 @@ namespace CodeSample_Currency.Currency
     {
         #region Singleton
         private static string s_assetName => nameof(CurrencyHelper);
-        private static string s_loadPath => $"ScriptableObjects/Helpers/{s_assetName}";
+        private static string s_loadPath => $"Helpers/{s_assetName}";
         private static string s_savePath => $"Assets/Resources/{s_loadPath}.asset";
 
         private static CurrencyHelper s_instance;

@@ -1,0 +1,16 @@
+{
+    "name": "CodeSample_Currencies",
+    "rootNamespace": "CodeSample_Currencies",
+    "references": [
+        "GUID:629879e096a4a7c4ca8473693399c82b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
