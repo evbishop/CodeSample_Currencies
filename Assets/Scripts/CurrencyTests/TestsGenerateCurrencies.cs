@@ -28,7 +28,8 @@ namespace CodeSample_Currency.CurrencyTests
             params Dictionary<CurrencyType, int>[] expectedResults)
         {
             bool isPassingAll = true;
-            for (int i = 0; i < 1000; i++)
+            HashSet<Dictionary<CurrencyType, int>> unachievedResults = expectedResults.ToHashSet();
+            for (int i = 0; i < 10000; i++)
             {
                 Dictionary<CurrencyType, int> actualResult;
 
@@ -53,12 +54,26 @@ namespace CodeSample_Currency.CurrencyTests
 
                 bool isPassing = expectedResults.Any(expectedResult =>
                     AreDictsEqual(expectedResult, actualResult));
-                if (!isPassing)
+                if (isPassing)
+                {
+                    var unachievedResult = unachievedResults
+                        .FirstOrDefault(result =>
+                            AreDictsEqual(result, actualResult));
+                    if (unachievedResult is not null)
+                        unachievedResults.Remove(unachievedResult);
+                }
+                else
                 {
                     isPassingAll = false;
-                    PrintDebug(actualResult, caller);
+                    PrintDebug(actualResult, caller, true);
                 }
             }
+
+            foreach (var result in unachievedResults)
+            {
+                PrintDebug(result, caller, false);
+            }
+
             return isPassingAll;
         }
 
@@ -67,14 +82,18 @@ namespace CodeSample_Currency.CurrencyTests
             return dict1.All(keyValue => keyValue.Value == dict2[keyValue.Key]);
         }
 
-        void PrintDebug(Dictionary<CurrencyType, int> actualResult, string caller)
+        void PrintDebug(Dictionary<CurrencyType, int> result, string caller, bool isFailed)
         {
-            string message = "";
-            foreach (var (key, value) in actualResult)
+            string resultString = "";
+            foreach (var (currencyType, quantity) in result)
             {
-                message += $"\n{key}: {value}";
+                resultString += $"\n{currencyType}: {quantity}";
             }
-            Debug.LogError($"{caller} failed on:{message}\n");
+
+            if (isFailed)
+                Debug.LogError($"{caller} failed on:{resultString}\n");
+            else
+                Debug.LogWarning($"{caller} never got a result:{resultString}\n");
         }
 
         #region Generate money in a single currency
