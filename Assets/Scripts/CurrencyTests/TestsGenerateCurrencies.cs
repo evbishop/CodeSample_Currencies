@@ -24,19 +24,36 @@ namespace CodeSample_Currency.CurrencyTests
             Assert.IsTrue(true);
         }
 
-        bool Run(int worth, string caller, params Dictionary<CurrencyType, int>[] expectedResults)
+        bool Run(int maxCurrenciesToGenerate, int worth, string caller,
+            params Dictionary<CurrencyType, int>[] expectedResults)
         {
             bool isPassingAll = true;
             for (int i = 0; i < 1000; i++)
             {
-                Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrency(
-                    currenciesWorth,
-                    worth);
+                Dictionary<CurrencyType, int> actualResult;
 
-                bool isPassingOne = expectedResults.Any(expectedResult =>
+                if (maxCurrenciesToGenerate == 1)
+                {
+                    actualResult = helper.GetMoneyInRandomCurrency(
+                        currenciesWorth,
+                        worth);
+                }
+                else if (maxCurrenciesToGenerate == 2)
+                {
+                    actualResult = helper.GetMoneyInRandomCurrencies(
+                        currenciesWorth,
+                        worth,
+                        true);
+                }
+                else
+                {
+                    Debug.LogWarning($"No code to test generation of {maxCurrenciesToGenerate} currencies");
+                    return false;
+                }
+
+                bool isPassing = expectedResults.Any(expectedResult =>
                     AreDictsEqual(expectedResult, actualResult));
-
-                if (!isPassingOne)
+                if (!isPassing)
                 {
                     isPassingAll = false;
                     PrintDebug(actualResult, caller);
@@ -60,6 +77,7 @@ namespace CodeSample_Currency.CurrencyTests
             Debug.LogError($"{caller} failed on:{message}\n");
         }
 
+        #region Generate money in a single currency
         [Test]
         public void Generate_0()
         {
@@ -70,7 +88,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 0 },
             };
 
-            Assert.IsTrue(Run(0, nameof(Generate_0), expectedResult));
+            Assert.IsTrue(Run(1, 0, nameof(Generate_0),
+                expectedResult));
         }
 
         [Test]
@@ -83,7 +102,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 0 },
             };
 
-            Assert.IsTrue(Run(1, nameof(Generate_1), expectedResult));
+            Assert.IsTrue(Run(1, 1, nameof(Generate_1),
+                expectedResult));
         }
 
         [Test]
@@ -96,7 +116,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 0 },
             };
 
-            Assert.IsTrue(Run(2, nameof(Generate_2), expectedResult));
+            Assert.IsTrue(Run(1, 2, nameof(Generate_2),
+                expectedResult));
         }
 
         [Test]
@@ -115,7 +136,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 0 },
             };
 
-            Assert.IsTrue(Run(3, nameof(Generate_3), expectedResult1, expectedResult2));
+            Assert.IsTrue(Run(1, 3, nameof(Generate_3),
+                expectedResult1, expectedResult2));
         }
 
         [Test]
@@ -134,7 +156,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 0 },
             };
 
-            Assert.IsTrue(Run(4, nameof(Generate_4), expectedResult1, expectedResult2));
+            Assert.IsTrue(Run(1, 4, nameof(Generate_4),
+                expectedResult1, expectedResult2));
         }
 
         [Test]
@@ -159,7 +182,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 1 },
             };
 
-            Assert.IsTrue(Run(5, nameof(Generate_5), expectedResult1, expectedResult2, expectedResult3));
+            Assert.IsTrue(Run(1, 5, nameof(Generate_5),
+                expectedResult1, expectedResult2, expectedResult3));
         }
 
         [Test]
@@ -184,7 +208,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 1 },
             };
 
-            Assert.IsTrue(Run(6, nameof(Generate_6), expectedResult1, expectedResult2, expectedResult3));
+            Assert.IsTrue(Run(1, 6, nameof(Generate_6),
+                expectedResult1, expectedResult2, expectedResult3));
         }
 
         [Test]
@@ -209,7 +234,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 1 },
             };
 
-            Assert.IsTrue(Run(7, nameof(Generate_7), expectedResult1, expectedResult2, expectedResult3));
+            Assert.IsTrue(Run(1, 7, nameof(Generate_7),
+                expectedResult1, expectedResult2, expectedResult3));
         }
 
         [Test]
@@ -234,7 +260,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 2 },
             };
 
-            Assert.IsTrue(Run(8, nameof(Generate_8), expectedResult1, expectedResult2, expectedResult3));
+            Assert.IsTrue(Run(1, 8, nameof(Generate_8),
+                expectedResult1, expectedResult2, expectedResult3));
         }
 
         [Test]
@@ -259,7 +286,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 2 },
             };
 
-            Assert.IsTrue(Run(9, nameof(Generate_9), expectedResult1, expectedResult2, expectedResult3));
+            Assert.IsTrue(Run(1, 9, nameof(Generate_9),
+                expectedResult1, expectedResult2, expectedResult3));
         }
 
         [Test]
@@ -284,7 +312,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 3 },
             };
 
-            Assert.IsTrue(Run(13, nameof(Generate_13), expectedResult1, expectedResult2, expectedResult3));
+            Assert.IsTrue(Run(1, 13, nameof(Generate_13),
+                expectedResult1, expectedResult2, expectedResult3));
         }
 
         [Test]
@@ -309,10 +338,12 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 3 },
             };
 
-            Assert.IsTrue(Run(14, nameof(Generate_14), expectedResult1, expectedResult2, expectedResult3));
+            Assert.IsTrue(Run(1, 14, nameof(Generate_14),
+                expectedResult1, expectedResult2, expectedResult3));
         }
+        #endregion
 
-        #region Two Allowed
+        #region Generate money in two currencies
 
         [Test]
         public void Generate_5_Two_Allowed()
@@ -336,7 +367,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 0 },
             };
 
-            Assert.IsTrue(Run(5, nameof(Generate_5_Two_Allowed), expectedResult1, expectedResult2, expectedResult3));
+            Assert.IsTrue(Run(2, 5, nameof(Generate_5_Two_Allowed),
+                expectedResult1, expectedResult2, expectedResult3));
         }
 
         [Test]
@@ -367,7 +399,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 0 },
             };
 
-            Assert.IsTrue(Run(6, nameof(Generate_6_Two_Allowed), expectedResult1, expectedResult2, expectedResult3, expectedResult4));
+            Assert.IsTrue(Run(2, 6, nameof(Generate_6_Two_Allowed),
+                expectedResult1, expectedResult2, expectedResult3, expectedResult4));
         }
 
         [Test]
@@ -398,7 +431,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 0 },
             };
 
-            Assert.IsTrue(Run(7, nameof(Generate_7_Two_Allowed), expectedResult1, expectedResult2, expectedResult3, expectedResult4));
+            Assert.IsTrue(Run(2, 7, nameof(Generate_7_Two_Allowed),
+                expectedResult1, expectedResult2, expectedResult3, expectedResult4));
         }
 
         [Test]
@@ -435,7 +469,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 0 },
             };
 
-            Assert.IsTrue(Run(8, nameof(Generate_8_Two_Allowed), expectedResult1, expectedResult2, expectedResult3, expectedResult4,
+            Assert.IsTrue(Run(2, 8, nameof(Generate_8_Two_Allowed),
+                expectedResult1, expectedResult2, expectedResult3, expectedResult4,
                 expectedResult5));
         }
 
@@ -473,7 +508,8 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 0 },
             };
 
-            Assert.IsTrue(Run(9, nameof(Generate_9_Two_Allowed), expectedResult1, expectedResult2, expectedResult3, expectedResult4,
+            Assert.IsTrue(Run(2, 9, nameof(Generate_9_Two_Allowed),
+                expectedResult1, expectedResult2, expectedResult3, expectedResult4,
                 expectedResult5));
         }
 
@@ -529,7 +565,9 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Gold, 1 },
             };
 
-            Assert.IsTrue(Run(13, nameof(Generate_13_Two_Allowed), expectedResult1));
+            Assert.IsTrue(Run(2, 13, nameof(Generate_13_Two_Allowed),
+                expectedResult1, expectedResult2, expectedResult3, expectedResult4,
+                expectedResult5, expectedResult6, expectedResult7, expectedResult8));
         }
         #endregion
     }
