@@ -1,11 +1,10 @@
 using CodeSample_Currency.Currency;
 using NUnit.Framework;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace CodeSample_Currency.CurrencyTests
 {
-    public class TestsPackCurrencies : MonoBehaviour
+    public class TestsPackCurrencies
     {
         CurrencyHelper helper;
 

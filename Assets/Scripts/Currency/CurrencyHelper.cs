@@ -114,7 +114,7 @@ namespace CodeSample_Currency.Currency
                 if (generatedWorth + possibleCurrencies.Min(resource => resource.Value) > targetWorth)
                     break;
 
-                int randomIndex = Random.Range(0, possibleCurrencies.Count - 1);
+                int randomIndex = Random.Range(0, possibleCurrencies.Count);
                 var selectedCurrency = possibleCurrencies.Skip(randomIndex).First();
 
                 if (generatedWorth + selectedCurrency.Value > targetWorth)
