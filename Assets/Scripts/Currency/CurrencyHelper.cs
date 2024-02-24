@@ -102,35 +102,40 @@ namespace CodeSample_Currency.Currency
         public Dictionary<CurrencyType, int> GetMoneyInRandomCurrencies(
             Dictionary<CurrencyType, int> currenciesWorth, int targetWorth, bool maxTwo = false)
         {
-            var result = GetEmptyWallet();
+            var wallet = GetEmptyWallet();
 
-            Dictionary<CurrencyType, int> possibleCurrencies = new();
-            foreach (var (currencyType, worth) in currenciesWorth)
-                possibleCurrencies.Add(currencyType, worth);
+            List<CurrencyType> possibleCurrencies = new();
+            foreach (var (currencyType, worth) in currenciesWorth
+                .Where((currencyType, worth) => worth <= targetWorth))
+                possibleCurrencies.Add(currencyType);
 
             int generatedWorth = 0;
             while (generatedWorth < targetWorth)
             {
-                if (generatedWorth + possibleCurrencies.Min(resource => resource.Value) > targetWorth)
-                    break;
-
                 int randomIndex = Random.Range(0, possibleCurrencies.Count);
-                var selectedCurrency = possibleCurrencies.Skip(randomIndex).First();
+                CurrencyType selectedCurrency = possibleCurrencies[randomIndex];
 
-                if (generatedWorth + selectedCurrency.Value > targetWorth)
-                    continue;
+                generatedWorth += currenciesWorth[selectedCurrency];
 
-                generatedWorth += selectedCurrency.Value;
+                wallet[selectedCurrency]++;
 
-                result[selectedCurrency.Key]++;
+                List<CurrencyType> newPossibleCurrencies = new();
+                foreach (var currencyType in possibleCurrencies)
+                {
+                    if (generatedWorth + currenciesWorth[currencyType] <= targetWorth)
+                        newPossibleCurrencies.Add(currencyType);
+                }
+                possibleCurrencies = newPossibleCurrencies;
+                if (possibleCurrencies.Count == 0)
+                    break;
             }
 
-            if (maxTwo && result.Values.All(quantity => quantity > 0))
+            if (maxTwo && wallet.Values.All(quantity => quantity > 0))
             {
-                result = PackTreeCurrenciesIntoTwo(result, possibleCurrencies);
+                wallet = PackTreeCurrenciesIntoTwo(wallet, currenciesWorth);
             }
 
-            return result;
+            return wallet;
         }
 
         /// <summary>
