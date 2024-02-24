@@ -11,11 +11,11 @@ namespace CodeSample_Currency.CurrencyTests
         CurrencyHelper helper;
         Dictionary<CurrencyType, int> currenciesWorth;
 
-        bool AreDictsEqual(Dictionary<CurrencyType, int> dict1, Dictionary<CurrencyType, int> dict2, string caller)
+        bool AreDictsEqual(Dictionary<CurrencyType, int> dict1, Dictionary<CurrencyType, int> dict2, string caller = "")
         {
             bool areEqual = dict1.All(keyValue => keyValue.Value == dict2[keyValue.Key]);
 
-            if (areEqual)
+            if (caller != "")
             {
                 string message = caller;
                 foreach (var (key, value) in dict1)
@@ -52,9 +52,9 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Silver, 0 },
                 { CurrencyType.Gold, 0 },
             };
-            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
+            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrency(
                 currenciesWorth,
-                worth, false);
+                worth);
             Assert.AreEqual(expectedResult, actualResult);
         }
 
@@ -68,9 +68,9 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Silver, 0 },
                 { CurrencyType.Gold, 0 },
             };
-            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
+            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrency(
                 currenciesWorth,
-                worth, false);
+                worth);
             Assert.AreEqual(expectedResult, actualResult);
         }
 
@@ -84,9 +84,9 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Silver, 0 },
                 { CurrencyType.Gold, 0 },
             };
-            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
+            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrency(
                 currenciesWorth,
-                worth, false);
+                worth);
             Assert.AreEqual(expectedResult, actualResult);
         }
 
@@ -106,11 +106,11 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Silver, 1 },
                 { CurrencyType.Gold, 0 },
             };
-            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
+            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrency(
                 currenciesWorth,
-                worth, false);
+                worth);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_3)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_3)));
+                AreDictsEqual(actualResult, expectedResult2));
         }
 
         [Test]
@@ -129,11 +129,11 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Silver, 1 },
                 { CurrencyType.Gold, 0 },
             };
-            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
+            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrency(
                 currenciesWorth,
-                worth, false);
+                worth);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_4)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_4)));
+                AreDictsEqual(actualResult, expectedResult2));
         }
 
         [Test]
@@ -158,12 +158,12 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Silver, 0 },
                 { CurrencyType.Gold, 1 },
             };
-            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
+            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrency(
                 currenciesWorth,
-                worth, false);
+                worth);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_5)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_5)) ||
-                AreDictsEqual(actualResult, expectedResult3, nameof(Generate_5)));
+                AreDictsEqual(actualResult, expectedResult2) ||
+                AreDictsEqual(actualResult, expectedResult3));
         }
 
         [Test]
@@ -188,12 +188,12 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Silver, 0 },
                 { CurrencyType.Gold, 1 },
             };
-            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
+            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrency(
                 currenciesWorth,
-                worth, false);
+                worth);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_6)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_6)) ||
-                AreDictsEqual(actualResult, expectedResult3, nameof(Generate_6)));
+                AreDictsEqual(actualResult, expectedResult2) ||
+                AreDictsEqual(actualResult, expectedResult3));
         }
 
         [Test]
@@ -218,12 +218,12 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Silver, 0 },
                 { CurrencyType.Gold, 1 },
             };
-            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
+            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrency(
                 currenciesWorth,
-                worth, false);
+                worth);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_7)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_7)) ||
-                AreDictsEqual(actualResult, expectedResult3, nameof(Generate_7)));
+                AreDictsEqual(actualResult, expectedResult2) ||
+                AreDictsEqual(actualResult, expectedResult3));
         }
 
         [Test]
@@ -248,12 +248,12 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Silver, 0 },
                 { CurrencyType.Gold, 2 },
             };
-            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
+            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrency(
                 currenciesWorth,
-                worth, false);
+                worth);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_8)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_8)) ||
-                AreDictsEqual(actualResult, expectedResult3, nameof(Generate_8)));
+                AreDictsEqual(actualResult, expectedResult2) ||
+                AreDictsEqual(actualResult, expectedResult3));
         }
 
         [Test]
@@ -278,12 +278,12 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Silver, 0 },
                 { CurrencyType.Gold, 2 },
             };
-            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
+            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrency(
                 currenciesWorth,
-                worth, false);
+                worth);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_9)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_9)) ||
-                AreDictsEqual(actualResult, expectedResult3, nameof(Generate_9)));
+                AreDictsEqual(actualResult, expectedResult2) ||
+                AreDictsEqual(actualResult, expectedResult3));
         }
 
         [Test]
@@ -308,12 +308,12 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Silver, 0 },
                 { CurrencyType.Gold, 3 },
             };
-            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
+            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrency(
                 currenciesWorth,
-                worth, false);
+                worth);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_13)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_13)) ||
-                AreDictsEqual(actualResult, expectedResult3, nameof(Generate_13)));
+                AreDictsEqual(actualResult, expectedResult2) ||
+                AreDictsEqual(actualResult, expectedResult3));
         }
 
         [Test]
@@ -338,12 +338,12 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Silver, 0 },
                 { CurrencyType.Gold, 3 },
             };
-            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
+            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrency(
                 currenciesWorth,
-                worth, false);
+                worth);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_14)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_14)) ||
-                AreDictsEqual(actualResult, expectedResult3, nameof(Generate_14)));
+                AreDictsEqual(actualResult, expectedResult2) ||
+                AreDictsEqual(actualResult, expectedResult3));
         }
 
         #region Two Allowed
@@ -361,21 +361,21 @@ namespace CodeSample_Currency.CurrencyTests
             Dictionary<CurrencyType, int> expectedResult2 = new()
             {
                 { CurrencyType.Copper, 0 },
-                { CurrencyType.Silver, 1 },
-                { CurrencyType.Gold, 0 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 1 },
             };
             Dictionary<CurrencyType, int> expectedResult3 = new()
             {
-                { CurrencyType.Copper, 0 },
-                { CurrencyType.Silver, 0 },
-                { CurrencyType.Gold, 1 },
+                { CurrencyType.Copper, 2 },
+                { CurrencyType.Silver, 1 },
+                { CurrencyType.Gold, 0 },
             };
             Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
                 currenciesWorth,
                 worth, true);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_5_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_5_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult3, nameof(Generate_5_Two_Allowed)));
+                AreDictsEqual(actualResult, expectedResult2) ||
+                AreDictsEqual(actualResult, expectedResult3));
         }
 
         [Test]
@@ -396,16 +396,23 @@ namespace CodeSample_Currency.CurrencyTests
             };
             Dictionary<CurrencyType, int> expectedResult3 = new()
             {
-                { CurrencyType.Copper, 0 },
+                { CurrencyType.Copper, 1 },
                 { CurrencyType.Silver, 0 },
                 { CurrencyType.Gold, 1 },
+            };
+            Dictionary<CurrencyType, int> expectedResult4 = new()
+            {
+                { CurrencyType.Copper, 3 },
+                { CurrencyType.Silver, 1 },
+                { CurrencyType.Gold, 0 },
             };
             Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
                 currenciesWorth,
                 worth, true);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_6_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_6_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult3, nameof(Generate_6_Two_Allowed)));
+                AreDictsEqual(actualResult, expectedResult2) ||
+                AreDictsEqual(actualResult, expectedResult3) ||
+                AreDictsEqual(actualResult, expectedResult4));
         }
 
         [Test]
@@ -420,22 +427,29 @@ namespace CodeSample_Currency.CurrencyTests
             };
             Dictionary<CurrencyType, int> expectedResult2 = new()
             {
-                { CurrencyType.Copper, 0 },
+                { CurrencyType.Copper, 1 },
                 { CurrencyType.Silver, 2 },
                 { CurrencyType.Gold, 0 },
             };
             Dictionary<CurrencyType, int> expectedResult3 = new()
             {
-                { CurrencyType.Copper, 0 },
+                { CurrencyType.Copper, 2 },
                 { CurrencyType.Silver, 0 },
                 { CurrencyType.Gold, 1 },
+            };
+            Dictionary<CurrencyType, int> expectedResult4 = new()
+            {
+                { CurrencyType.Copper, 4 },
+                { CurrencyType.Silver, 1 },
+                { CurrencyType.Gold, 0 },
             };
             Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
                 currenciesWorth,
                 worth, true);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_7_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_7_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult3, nameof(Generate_7_Two_Allowed)));
+                AreDictsEqual(actualResult, expectedResult2) ||
+                AreDictsEqual(actualResult, expectedResult3) ||
+                AreDictsEqual(actualResult, expectedResult4));
         }
 
         [Test]
@@ -450,7 +464,7 @@ namespace CodeSample_Currency.CurrencyTests
             };
             Dictionary<CurrencyType, int> expectedResult2 = new()
             {
-                { CurrencyType.Copper, 0 },
+                { CurrencyType.Copper, 2 },
                 { CurrencyType.Silver, 2 },
                 { CurrencyType.Gold, 0 },
             };
@@ -466,13 +480,20 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Silver, 1 },
                 { CurrencyType.Gold, 1 },
             };
+            Dictionary<CurrencyType, int> expectedResult5 = new()
+            {
+                { CurrencyType.Copper, 5 },
+                { CurrencyType.Silver, 1 },
+                { CurrencyType.Gold, 0 },
+            };
             Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
                 currenciesWorth,
                 worth, true);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_8_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_8_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult3, nameof(Generate_8_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult4, nameof(Generate_8_Two_Allowed)));
+                AreDictsEqual(actualResult, expectedResult2) ||
+                AreDictsEqual(actualResult, expectedResult3) ||
+                AreDictsEqual(actualResult, expectedResult4) ||
+                AreDictsEqual(actualResult, expectedResult5));
         }
 
         [Test]
@@ -499,17 +520,24 @@ namespace CodeSample_Currency.CurrencyTests
             };
             Dictionary<CurrencyType, int> expectedResult4 = new()
             {
-                { CurrencyType.Copper, 0 },
+                { CurrencyType.Copper, 3 },
+                { CurrencyType.Silver, 2 },
+                { CurrencyType.Gold, 0 },
+            };
+            Dictionary<CurrencyType, int> expectedResult5 = new()
+            {
+                { CurrencyType.Copper, 6 },
                 { CurrencyType.Silver, 1 },
-                { CurrencyType.Gold, 1 },
+                { CurrencyType.Gold, 0 },
             };
             Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
                 currenciesWorth,
                 worth, true);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_9_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_9_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult3, nameof(Generate_9_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult4, nameof(Generate_9_Two_Allowed)));
+                AreDictsEqual(actualResult, expectedResult2) ||
+                AreDictsEqual(actualResult, expectedResult3) ||
+                AreDictsEqual(actualResult, expectedResult4) ||
+                AreDictsEqual(actualResult, expectedResult5));
         }
 
         [Test]
@@ -524,7 +552,7 @@ namespace CodeSample_Currency.CurrencyTests
             };
             Dictionary<CurrencyType, int> expectedResult2 = new()
             {
-                { CurrencyType.Copper, 0 },
+                { CurrencyType.Copper, 1 },
                 { CurrencyType.Silver, 4 },
                 { CurrencyType.Gold, 0 },
             };
@@ -540,50 +568,41 @@ namespace CodeSample_Currency.CurrencyTests
                 { CurrencyType.Silver, 1 },
                 { CurrencyType.Gold, 2 },
             };
+            Dictionary<CurrencyType, int> expectedResult5 = new()
+            {
+                { CurrencyType.Copper, 4 },
+                { CurrencyType.Silver, 3 },
+                { CurrencyType.Gold, 0 },
+            };
+            Dictionary<CurrencyType, int> expectedResult6 = new()
+            {
+                { CurrencyType.Copper, 7 },
+                { CurrencyType.Silver, 2 },
+                { CurrencyType.Gold, 0 },
+            };
+            Dictionary<CurrencyType, int> expectedResult7 = new()
+            {
+                { CurrencyType.Copper, 10 },
+                { CurrencyType.Silver, 1 },
+                { CurrencyType.Gold, 0 },
+            };
+            Dictionary<CurrencyType, int> expectedResult8 = new()
+            {
+                { CurrencyType.Copper, 8 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 1 },
+            };
             Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
                 currenciesWorth,
                 worth, true);
             Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_13_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_13_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult3, nameof(Generate_13_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult4, nameof(Generate_13_Two_Allowed)));
-        }
-
-        [Test]
-        public void Generate_10000009_Two_Allowed()
-        {
-            int worth = 10000009;
-            Dictionary<CurrencyType, int> expectedResult1 = new()
-            {
-                { CurrencyType.Copper, 10000009 },
-                { CurrencyType.Silver, 0 },
-                { CurrencyType.Gold, 0 },
-            };
-            Dictionary<CurrencyType, int> expectedResult2 = new()
-            {
-                { CurrencyType.Copper, 0 },
-                { CurrencyType.Silver, 3333336 },
-                { CurrencyType.Gold, 0 },
-            };
-            Dictionary<CurrencyType, int> expectedResult3 = new()
-            {
-                { CurrencyType.Copper, 4 },
-                { CurrencyType.Silver, 0 },
-                { CurrencyType.Gold, 2000001 },
-            };
-            Dictionary<CurrencyType, int> expectedResult4 = new()
-            {
-                { CurrencyType.Copper, 0 },
-                { CurrencyType.Silver, 1 },
-                { CurrencyType.Gold, 2000001 },
-            };
-            Dictionary<CurrencyType, int> actualResult = helper.GetMoneyInRandomCurrencies(
-                currenciesWorth,
-                worth, true);
-            Assert.IsTrue(AreDictsEqual(actualResult, expectedResult1, nameof(Generate_10000009_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult2, nameof(Generate_10000009_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult3, nameof(Generate_10000009_Two_Allowed)) ||
-                AreDictsEqual(actualResult, expectedResult4, nameof(Generate_10000009_Two_Allowed)));
+                AreDictsEqual(actualResult, expectedResult2) ||
+                AreDictsEqual(actualResult, expectedResult3) ||
+                AreDictsEqual(actualResult, expectedResult4) ||
+                AreDictsEqual(actualResult, expectedResult5) ||
+                AreDictsEqual(actualResult, expectedResult6) ||
+                AreDictsEqual(actualResult, expectedResult7) ||
+                AreDictsEqual(actualResult, expectedResult8));
         }
         #endregion
     }
