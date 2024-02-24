@@ -34,6 +34,8 @@ namespace CodeSample_Currency.Currency
         [field: SerializeField] public int CurrencyRemainderIgnoreThreshold { get; private set; } = 2;
         [field: SerializeField] public Dictionary<CurrencyType, CurrencyInfo> CurrencyInfos { get; private set; }
 
+        private System.Random _random = new System.Random();
+
         public Dictionary<CurrencyType, int> GetEmptyWallet()
         {
             Dictionary<CurrencyType, int> result = new();
@@ -59,22 +61,42 @@ namespace CodeSample_Currency.Currency
         {
             var wallet = GetEmptyWallet();
 
-            Dictionary<CurrencyType, int> possibleCurrencies = new();
+            List<CurrencyType> possibleCurrencies = new();
             foreach (var (currencyType, worth) in currenciesWorth)
             {
                 if (worth <= moneyToGet)
-                    possibleCurrencies.Add(currencyType, worth);
+                    possibleCurrencies.Add(currencyType);
             }
 
             if (possibleCurrencies.Count == 0)
                 return wallet;
 
             int randomIndex = Random.Range(0, possibleCurrencies.Count);
-            var selectedCurrency = possibleCurrencies.Skip(randomIndex).First();
+            CurrencyType selectedCurrency = possibleCurrencies[randomIndex];
 
-            FillWalletWithCurrency(wallet, currenciesWorth, selectedCurrency.Key, moneyToGet);
+            FillWalletWithCurrency(wallet, currenciesWorth, selectedCurrency, moneyToGet);
 
             return wallet;
+        }
+
+        void FillWalletWithCurrency(Dictionary<CurrencyType, int> wallet,
+            in Dictionary<CurrencyType, int> currenciesWorth,
+            CurrencyType currencyType,
+            int value)
+        {
+            int selectedCurrencyQuantity = value / currenciesWorth[currencyType];
+            wallet[currencyType] += selectedCurrencyQuantity;
+
+            int generatedValue = selectedCurrencyQuantity * currenciesWorth[currencyType];
+
+            if (generatedValue < value)
+            {
+                int remainingValue = value - generatedValue;
+                if (remainingValue > CurrencyRemainderIgnoreThreshold)
+                {
+                    wallet[currencyType]++;
+                }
+            }
         }
 
         public Dictionary<CurrencyType, int> GetMoneyInRandomCurrencies(
@@ -111,26 +133,17 @@ namespace CodeSample_Currency.Currency
             return result;
         }
 
-        public void FillWalletWithCurrency(Dictionary<CurrencyType, int> wallet,
-            Dictionary<CurrencyType, int> currenciesWorth,
-            CurrencyType currencyType,
-            int value)
-        {
-            int selectedCurrencyQuantity = value / currenciesWorth[currencyType];
-            wallet[currencyType] += selectedCurrencyQuantity;
-
-            int generatedValue = selectedCurrencyQuantity * currenciesWorth[currencyType];
-
-            if (generatedValue < value)
-            {
-                int remainingValue = value - generatedValue;
-                if (remainingValue > CurrencyRemainderIgnoreThreshold)
-                {
-                    wallet[currencyType]++;
-                }
-            }
-        }
-
+        /// <summary>
+        /// Packs a wallet containing two types of currencies from a wallet containing three types of currencies based on their worth.
+        /// </summary>
+        /// <param name="wallet">The wallet containing the initial amounts of each type of currency.</param>
+        /// <param name="currenciesWorth">The relative worth of each currency type.</param>
+        /// <returns>A dictionary containing the updated amounts of Copper, Silver, and Gold after packing.</returns>
+        /// <remarks>
+        /// This method calculates the total worth of each currency type in the wallet based on the worth of the other two currencies.
+        /// It then attempts to convert the currencies to two types by finding the largest currency type that can be evenly divided by the worth of the other two.
+        /// If a currency type cannot be converted, it carries over unchanged into the new wallet.
+        /// </remarks>
         public Dictionary<CurrencyType, int> PackTreeCurrenciesIntoTwo(
             Dictionary<CurrencyType, int> wallet,
             Dictionary<CurrencyType, int> currenciesWorth)
