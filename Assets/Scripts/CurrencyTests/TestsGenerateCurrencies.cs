@@ -6,24 +6,8 @@ using UnityEngine;
 
 namespace CodeSample_Currency.CurrencyTests
 {
-    public class TestsGenerateCurrencies
+    public class TestsGenerateCurrencies : TestsCurrencies
     {
-        CurrencyHelper helper;
-        Dictionary<CurrencyType, int> currenciesWorth;
-
-        [Test]
-        public void _Init()
-        {
-            helper = CurrencyHelper.Instance;
-            currenciesWorth = new()
-            {
-                { CurrencyType.Copper, 1 },
-                { CurrencyType.Silver, 3 },
-                { CurrencyType.Gold, 5 }
-            };
-            Assert.IsTrue(true);
-        }
-
         bool Run(int maxCurrenciesToGenerate, int worth, string caller,
             params Dictionary<CurrencyType, int>[] expectedResults)
         {
@@ -75,25 +59,6 @@ namespace CodeSample_Currency.CurrencyTests
             }
 
             return isPassingAll;
-        }
-
-        bool AreDictsEqual(Dictionary<CurrencyType, int> dict1, Dictionary<CurrencyType, int> dict2)
-        {
-            return dict1.All(keyValue => keyValue.Value == dict2[keyValue.Key]);
-        }
-
-        void PrintDebug(Dictionary<CurrencyType, int> result, string caller, bool isFailed)
-        {
-            string resultString = "";
-            foreach (var (currencyType, quantity) in result)
-            {
-                resultString += $"\n{currencyType}: {quantity}";
-            }
-
-            if (isFailed)
-                Debug.LogError($"{caller} failed on:{resultString}\n");
-            else
-                Debug.LogWarning($"{caller} never got a result:{resultString}\n");
         }
 
         #region Generate money in a single currency
