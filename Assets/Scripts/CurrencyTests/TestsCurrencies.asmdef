@@ -1,6 +1,6 @@
 {
-    "name": "CurrencyTests",
-    "rootNamespace": "CodeSample_Currency.CurrencyTests",
+    "name": "TestsCurrencies",
+    "rootNamespace": "CodeSample_Currencies.TestsCurrencies",
     "references": [
         "UnityEngine.TestRunner",
         "CodeSample_Currencies"

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace CodeSample_Currency.Utility
+namespace CodeSample_Currencies.Utility
 {
     public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
     {

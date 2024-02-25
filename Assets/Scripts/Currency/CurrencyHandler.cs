@@ -1,9 +1,8 @@
-﻿using CodeSample_Currency.Currency;
-using CodeSample_Currency.SaveData;
-using CodeSample_Currency.Utility;
+﻿using CodeSample_Currencies.SaveData;
+using CodeSample_Currencies.Utility;
 using System.Collections.Generic;
 
-namespace CodeSample_Currency
+namespace CodeSample_Currencies.Currency
 {
     public class CurrencyHandler : MonoSingleton<CurrencyHandler>
     {

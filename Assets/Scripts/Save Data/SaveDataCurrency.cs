@@ -1,7 +1,7 @@
-using CodeSample_Currency.Currency;
+using CodeSample_Currencies.Currency;
 using System.Collections.Generic;
 
-namespace CodeSample_Currency.SaveData
+namespace CodeSample_Currencies.SaveData
 {
     public class SaveDataCurrency : SaveData
     {

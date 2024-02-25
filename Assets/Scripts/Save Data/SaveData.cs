@@ -1,6 +1,6 @@
 using System;
 
-namespace CodeSample_Currency.SaveData
+namespace CodeSample_Currencies.SaveData
 {
     [Serializable]
     public abstract class SaveData

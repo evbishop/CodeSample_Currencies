@@ -31,8 +31,8 @@ MonoBehaviour:
     serializationDepthLimit: 64
     assemblyNames:
     - CodeSample_Currencies
-    - CurrencyTests
     - EasySave3
+    - TestsCurrencies
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1

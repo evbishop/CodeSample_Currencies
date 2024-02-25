@@ -1,10 +1,10 @@
-﻿using CodeSample_Currency.Currency;
+﻿using CodeSample_Currencies.Currency;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace CodeSample_Currency.CurrencyTests
+namespace CodeSample_Currencies.TestsCurrencies
 {
     public class TestsGenerateCurrencies : TestsCurrencies
     {
@@ -12,8 +12,11 @@ namespace CodeSample_Currency.CurrencyTests
             params Dictionary<CurrencyType, int>[] expectedResults)
         {
             bool isPassingAll = true;
+            int iterations = 10000;
             HashSet<Dictionary<CurrencyType, int>> unachievedResults = expectedResults.ToHashSet();
-            for (int i = 0; i < 10000; i++)
+            Dictionary<string, int> resultCounts = new();
+
+            for (int i = 0; i < iterations; i++)
             {
                 Dictionary<CurrencyType, int> actualResult;
 
@@ -36,27 +39,35 @@ namespace CodeSample_Currency.CurrencyTests
                     return false;
                 }
 
-                bool isPassing = expectedResults.Any(expectedResult =>
-                    AreDictsEqual(expectedResult, actualResult));
-                if (isPassing)
-                {
-                    var unachievedResult = unachievedResults
-                        .FirstOrDefault(result =>
-                            AreDictsEqual(result, actualResult));
-                    if (unachievedResult is not null)
-                        unachievedResults.Remove(unachievedResult);
-                }
-                else
+                var matchingResult = expectedResults
+                    .FirstOrDefault(expectedResult =>
+                        expectedResult.IsEqualByValues(actualResult));
+
+                if (matchingResult is null)
                 {
                     isPassingAll = false;
                     PrintDebug(actualResult, caller, true);
                 }
+                else
+                {
+                    var unachievedResult = unachievedResults
+                        .FirstOrDefault(result =>
+                            result.IsEqualByValues(actualResult));
+                    if (unachievedResult is not null)
+                        unachievedResults.Remove(unachievedResult);
+
+                    string matchingResultString = matchingResult.ToWalletString();
+                    if (resultCounts.ContainsKey(matchingResultString))
+                        resultCounts[matchingResultString] += 1;
+                    else
+                        resultCounts.Add(matchingResultString, 1);
+                }
             }
 
+            PrintDebug(resultCounts, iterations);
+
             foreach (var result in unachievedResults)
-            {
                 PrintDebug(result, caller, false);
-            }
 
             return isPassingAll;
         }

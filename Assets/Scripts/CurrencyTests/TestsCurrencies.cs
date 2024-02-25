@@ -1,10 +1,10 @@
-using CodeSample_Currency.Currency;
+using CodeSample_Currencies.Currency;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace CodeSample_Currency.CurrencyTests
+namespace CodeSample_Currencies.TestsCurrencies
 {
     public abstract class TestsCurrencies
     {
@@ -24,23 +24,22 @@ namespace CodeSample_Currency.CurrencyTests
             Assert.IsTrue(true);
         }
 
-        protected bool AreDictsEqual(Dictionary<CurrencyType, int> dict1, Dictionary<CurrencyType, int> dict2)
-        {
-            return dict1.All(keyValue => keyValue.Value == dict2[keyValue.Key]);
-        }
-
         protected void PrintDebug(Dictionary<CurrencyType, int> result, string caller, bool isFailed)
         {
-            string resultString = "";
-            foreach (var (currencyType, quantity) in result)
-            {
-                resultString += $"\n{currencyType}: {quantity}";
-            }
-
             if (isFailed)
-                Debug.LogError($"{caller} failed on:{resultString}\n");
+                Debug.LogError($"{caller} failed on: {result.ToWalletString()}\n");
             else
-                Debug.LogWarning($"{caller} never got a result:{resultString}\n");
+                Debug.LogWarning($"{caller} never got a result: {result.ToWalletString()}\n");
+        }
+
+        protected void PrintDebug(Dictionary<string, int> results, int iterations)
+        {
+            Dictionary<string, int> ordered = results
+                .OrderByDescending(kvp => kvp.Value)
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+            foreach (var (key, value) in ordered)
+                Debug.Log($"{key}: {(float)value / iterations * 100}%");
         }
     }
 }

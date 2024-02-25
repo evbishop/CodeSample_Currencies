@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace CodeSample_Currency.Currency
+namespace CodeSample_Currencies.Currency
 {
     [CreateAssetMenu(fileName = "CurrencyHelper", menuName = "Scriptable Objects/CurrencyHelper")]
     public class CurrencyHelper : SerializedScriptableObject
@@ -137,7 +137,7 @@ namespace CodeSample_Currency.Currency
         }
 
         /// <summary>
-        /// Packs a wallet containing two types of currencies from a wallet containing three types of currencies based on their worth.
+        /// Packs a wallet containing one or two types of currencies from another wallet containing three types of currencies based on their worth.
         /// </summary>
         /// <param name="wallet">The wallet containing the initial amounts of each type of currency.</param>
         /// <param name="currenciesWorth">The relative worth of each currency type.</param>
@@ -155,7 +155,7 @@ namespace CodeSample_Currency.Currency
             int silverWorth = currenciesWorth[CurrencyType.Silver];
             int goldWorth = currenciesWorth[CurrencyType.Gold];
 
-            Dictionary<CurrencyType, int> result = new Dictionary<CurrencyType, int>
+            Dictionary<CurrencyType, int> result = new()
             {
                 { CurrencyType.Copper, wallet[CurrencyType.Copper] },
                 { CurrencyType.Silver, wallet[CurrencyType.Silver] },

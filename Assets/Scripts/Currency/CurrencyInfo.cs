@@ -1,8 +1,7 @@
-using CodeSample_Currency.Currency;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace CodeSample_Currency
+namespace CodeSample_Currencies.Currency
 {
     [CreateAssetMenu(fileName = "Currency", menuName = "Scriptable Objects/Currency")]
     public class CurrencyInfo : ScriptableObject
