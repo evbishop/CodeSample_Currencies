@@ -1,9 +1,7 @@
 {
-    "name": "CodeSample_Currencies",
-    "rootNamespace": "CodeSample_Currencies",
+    "name": "UniTask.Linq",
     "references": [
-        "GUID:629879e096a4a7c4ca8473693399c82b",
-        "GUID:f51ebe6a0ceec4240a699833d6309b23"
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

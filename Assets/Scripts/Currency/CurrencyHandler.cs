@@ -1,5 +1,6 @@
 ﻿using CodeSample_Currencies.SaveData;
 using CodeSample_Currencies.Utility;
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 
 namespace CodeSample_Currencies.Currency
@@ -42,14 +43,14 @@ namespace CodeSample_Currencies.Currency
             }
 
             IsDirty = true;
-            Save();
+            Save().Forget();
         }
 
         #region SaveLoad
-        public void Save()
+        public async UniTaskVoid Save()
         {
-            //await UniTask.Yield(); // Simple protection from
-            if (IsDirty)             // saving multiple times in a single frame
+            await UniTask.Yield(); // Simple protection from
+            if (IsDirty)           // saving multiple times in a single frame
             {
                 IsDirty = false;
                 saveData.Save();
