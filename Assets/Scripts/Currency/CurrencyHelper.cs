@@ -162,12 +162,10 @@ namespace CodeSample_Currencies.Currency
                 { CurrencyType.Gold, wallet[CurrencyType.Gold] }
             };
 
-            // Calculate total worths
             int totalCopperWorth = copperWorth * result[CurrencyType.Copper];
             int totalSilverWorth = silverWorth * result[CurrencyType.Silver];
             int totalGoldWorth = goldWorth * result[CurrencyType.Gold];
 
-            // Generate a random number to decide the conversion path
             var possibleConversionPaths = GetPossibleConversions(
                 totalCopperWorth, totalSilverWorth, totalGoldWorth,
                 copperWorth, silverWorth, goldWorth);
@@ -187,32 +185,35 @@ namespace CodeSample_Currencies.Currency
         {
             List<ConversionType> conversions = new();
 
-            if (copperTotalWorth % silverWorth % goldWorth == 0)
-                conversions.Add(ConversionType.CopperToSilverGold);
-            if (copperTotalWorth % goldWorth % silverWorth == 0)
-                conversions.Add(ConversionType.CopperToGoldSilver);
             if (copperTotalWorth % silverWorth == 0)
                 conversions.Add(ConversionType.CopperToSilver);
+            else if (copperTotalWorth % silverWorth % goldWorth == 0)
+                conversions.Add(ConversionType.CopperToSilverGold);
+
             if (copperTotalWorth % goldWorth == 0)
                 conversions.Add(ConversionType.CopperToGold);
+            else if (copperTotalWorth % goldWorth % silverWorth == 0)
+                conversions.Add(ConversionType.CopperToGoldSilver);
 
-            if (silverTotalWorth % copperWorth % goldWorth == 0)
-                conversions.Add(ConversionType.SilverToCopperGold);
-            if (silverTotalWorth % goldWorth % copperWorth == 0)
-                conversions.Add(ConversionType.SilverToGoldCopper);
             if (silverTotalWorth % copperWorth == 0)
                 conversions.Add(ConversionType.SilverToCopper);
+            else if (silverTotalWorth % copperWorth % goldWorth == 0)
+                conversions.Add(ConversionType.SilverToCopperGold);
+
             if (silverTotalWorth % goldWorth == 0)
                 conversions.Add(ConversionType.SilverToGold);
+            else if (silverTotalWorth % goldWorth % copperWorth == 0)
+                conversions.Add(ConversionType.SilverToGoldCopper);
 
-            if (goldTotalWorth % copperWorth % silverWorth == 0)
-                conversions.Add(ConversionType.GoldToCopperSilver);
-            if (goldTotalWorth % silverWorth % copperWorth == 0)
-                conversions.Add(ConversionType.GoldToSilverCopper);
             if (goldTotalWorth % copperWorth == 0)
                 conversions.Add(ConversionType.GoldToCopper);
+            else if (goldTotalWorth % copperWorth % silverWorth == 0)
+                conversions.Add(ConversionType.GoldToCopperSilver);
+
             if (goldTotalWorth % silverWorth == 0)
                 conversions.Add(ConversionType.GoldToSilver);
+            else if (goldTotalWorth % silverWorth % copperWorth == 0)
+                conversions.Add(ConversionType.GoldToSilverCopper);
 
             return conversions;
         }
