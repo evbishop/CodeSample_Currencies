@@ -31,6 +31,8 @@ MonoBehaviour:
     serializationDepthLimit: 64
     assemblyNames:
     - CodeSample_Currencies
+    - DOTween.Modules
+    - DOTweenPro.Scripts
     - EasySave3
     - TestsCurrencies
     - UniTask
