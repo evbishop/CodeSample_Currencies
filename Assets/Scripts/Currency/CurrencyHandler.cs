@@ -1,6 +1,4 @@
-﻿using CodeSample_Currencies.SaveData;
-using CodeSample_Currencies.Utility;
-using Cysharp.Threading.Tasks;
+﻿using CodeSample_Currencies.Utility;
 using System.Collections.Generic;
 
 namespace CodeSample_Currencies.Currency
@@ -13,26 +11,20 @@ namespace CodeSample_Currencies.Currency
             bool animateChange);
         public event WalletUpdateDelegate OnWalletUpdated;
 
-        SaveDataCurrency saveData = new();
-
-        public bool IsDirty { get; set; }
-
-        public Dictionary<CurrencyType, int> CurrenciesWorth => saveData.CurrenciesWorth;
-        public Dictionary<CurrencyType, int> Wallet => saveData.Wallet;
+        public Dictionary<CurrencyType, int> CurrenciesWorth { get; private set; }
+        public Dictionary<CurrencyType, int> Wallet { get; private set; }
 
         void Awake()
         {
             if (TryInitializeSingleton())
             {
-                DontDestroyOnLoad(gameObject);
-                saveData.Load();
+                Wallet = CurrencyHelper.Instance.GetEmptyWallet();
+                CurrenciesWorth = CurrencyHelper.Instance.GetAllCurrenciesDefaultWorth();
             }
         }
 
         public void InitNew(int initialMoneyTotal)
         {
-            saveData.Reset();
-
             Dictionary<CurrencyType, int> moneyInRandomCurrencies =
                 CurrencyHelper.Instance.GetMoneyInRandomCurrencies(CurrenciesWorth, initialMoneyTotal);
 
@@ -41,57 +33,24 @@ namespace CodeSample_Currencies.Currency
                 Wallet[currencyType] = quantity;
                 OnWalletUpdated?.Invoke(currencyType, Wallet[currencyType], false);
             }
-
-            IsDirty = true;
-            Save().Forget();
         }
 
-        #region SaveLoad
-        public async UniTaskVoid Save()
-        {
-            await UniTask.Yield(); // Simple protection from
-            if (IsDirty)           // saving multiple times in a single frame
-            {
-                IsDirty = false;
-                saveData.Save();
-            }
-        }
-
-        public void Load()
-        {
-            foreach (var (currencyType, quantity) in Wallet)
-                OnWalletUpdated?.Invoke(currencyType, quantity, false);
-        }
-        #endregion
-
-        public void AddMoney(int money, bool save)
+        public void AddMoney(int money, bool maxTwo)
         {
             Dictionary<CurrencyType, int> moneyInRandomCurrencies =
-                CurrencyHelper.Instance.GetMoneyInRandomCurrencies(CurrenciesWorth, money);
+                CurrencyHelper.Instance.GetMoneyInRandomCurrencies(CurrenciesWorth, money, maxTwo);
 
             foreach (var (currencyType, quantity) in moneyInRandomCurrencies)
-                AddCurrency(currencyType, quantity, false);
-
-            if (save)
-            {
-                IsDirty = true;
-                Save();
-            }
+                AddCurrency(currencyType, quantity);
         }
 
-        public void AddCurrency(CurrencyType currencyType, int quantity, bool save)
+        public void AddCurrency(CurrencyType currencyType, int quantity)
         {
             if (quantity == 0)
                 return;
 
             Wallet[currencyType] += quantity;
             OnWalletUpdated?.Invoke(currencyType, Wallet[currencyType], true);
-
-            if (save)
-            {
-                IsDirty = true;
-                Save();
-            }
         }
 
         public void RemoveCurrencies(Dictionary<CurrencyType, int> currenciesToRemove)
@@ -99,13 +58,9 @@ namespace CodeSample_Currencies.Currency
             foreach (var (currencyType, quantity) in currenciesToRemove)
             {
                 Wallet[currencyType] -= quantity;
-                if (quantity != 0)
-                    IsDirty = true;
 
                 OnWalletUpdated?.Invoke(currencyType, Wallet[currencyType], false);
             }
-
-            Save();
         }
     }
 }

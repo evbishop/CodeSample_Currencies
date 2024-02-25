@@ -11,6 +11,7 @@ namespace CodeSample_Currencies.Utility
         }
 
         [SerializeField] PersistenceType persistenceType = PersistenceType.DestroyNewest;
+        [SerializeField] bool dontDestroyOnLoad;
 
         public static T Instance { get; private set; }
 
@@ -19,6 +20,8 @@ namespace CodeSample_Currencies.Utility
             if (Instance is null)
             {
                 Instance = this as T;
+                if (dontDestroyOnLoad)
+                    DontDestroyOnLoad(gameObject);
                 return true;
             }
 
@@ -26,6 +29,8 @@ namespace CodeSample_Currencies.Utility
             {
                 Destroy(Instance.gameObject);
                 Instance = this as T;
+                if (dontDestroyOnLoad)
+                    DontDestroyOnLoad(gameObject);
                 return true;
             }
 

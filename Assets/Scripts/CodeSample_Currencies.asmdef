@@ -2,9 +2,9 @@
     "name": "CodeSample_Currencies",
     "rootNamespace": "CodeSample_Currencies",
     "references": [
-        "GUID:629879e096a4a7c4ca8473693399c82b",
         "GUID:f51ebe6a0ceec4240a699833d6309b23",
-        "GUID:1831634074ac71f4f9dae74d6584f5f7"
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:0ca797a51a89bc7469e30c7d22f87bf4"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
