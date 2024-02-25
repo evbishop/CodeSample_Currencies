@@ -20,5 +20,13 @@ namespace CodeSample_Currencies.Currency
             result += ")";
             return result;
         }
+
+        public static Dictionary<CurrencyType, int> GetCopy(this Dictionary<CurrencyType, int> wallet)
+        {
+            Dictionary<CurrencyType, int> copy = new();
+            foreach (var (currencyType, quantity) in wallet)
+                copy.Add(currencyType, quantity);
+            return copy;
+        }
     }
 }

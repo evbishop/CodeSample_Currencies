@@ -136,17 +136,6 @@ namespace CodeSample_Currencies.Currency
             return wallet;
         }
 
-        /// <summary>
-        /// Packs a wallet containing one or two types of currencies from another wallet containing three types of currencies based on their worth.
-        /// </summary>
-        /// <param name="wallet">The wallet containing the initial amounts of each type of currency.</param>
-        /// <param name="currenciesWorth">The relative worth of each currency type.</param>
-        /// <returns>A dictionary containing the updated amounts of Copper, Silver, and Gold after packing.</returns>
-        /// <remarks>
-        /// This method calculates the total worth of each currency type in the wallet based on the worth of the other two currencies.
-        /// It then attempts to convert the currencies to two types by finding the largest currency type that can be evenly divided by the worth of the other two.
-        /// If a currency type cannot be converted, it carries over unchanged into the new wallet.
-        /// </remarks>
         public Dictionary<CurrencyType, int> PackTreeCurrenciesIntoTwo(
             in Dictionary<CurrencyType, int> wallet,
             in Dictionary<CurrencyType, int> currenciesWorth)
@@ -155,162 +144,102 @@ namespace CodeSample_Currencies.Currency
             int silverWorth = currenciesWorth[CurrencyType.Silver];
             int goldWorth = currenciesWorth[CurrencyType.Gold];
 
-            Dictionary<CurrencyType, int> result = new()
-            {
-                { CurrencyType.Copper, wallet[CurrencyType.Copper] },
-                { CurrencyType.Silver, wallet[CurrencyType.Silver] },
-                { CurrencyType.Gold, wallet[CurrencyType.Gold] }
-            };
+            int totalCopperWorth = copperWorth * wallet[CurrencyType.Copper];
+            int totalSilverWorth = silverWorth * wallet[CurrencyType.Silver];
+            int totalGoldWorth = goldWorth * wallet[CurrencyType.Gold];
 
-            int totalCopperWorth = copperWorth * result[CurrencyType.Copper];
-            int totalSilverWorth = silverWorth * result[CurrencyType.Silver];
-            int totalGoldWorth = goldWorth * result[CurrencyType.Gold];
-
-            var possibleConversionPaths = GetPossibleConversions(
-                totalCopperWorth, totalSilverWorth, totalGoldWorth,
-                copperWorth, silverWorth, goldWorth);
-            ConversionType conversionPath = possibleConversionPaths
-                [Random.Range(0, possibleConversionPaths.Count)];
-
-            Convert(result, conversionPath,
+            List<Dictionary<CurrencyType, int>> possibleResults = GetPossibleConversions(
+                wallet,
                 totalCopperWorth, totalSilverWorth, totalGoldWorth,
                 copperWorth, silverWorth, goldWorth);
 
-            return result;
+            return possibleResults[Random.Range(0, possibleResults.Count)];
         }
 
-        List<ConversionType> GetPossibleConversions(
+        List<Dictionary<CurrencyType, int>> GetPossibleConversions(
+            Dictionary<CurrencyType, int> wallet,
             int copperTotalWorth, int silverTotalWorth, int goldTotalWorth,
             int copperWorth, int silverWorth, int goldWorth)
         {
-            List<ConversionType> conversions = new();
+            List<Dictionary<CurrencyType, int>> wallets = new();
 
             if (copperTotalWorth % silverWorth == 0)
-                conversions.Add(ConversionType.CopperToSilver);
+                GetWalletWithOneCurrency(
+                    CurrencyType.Copper, CurrencyType.Silver,
+                    copperTotalWorth, silverWorth);
             else if (copperTotalWorth % silverWorth % goldWorth == 0)
-                conversions.Add(ConversionType.CopperToSilverGold);
+                GetWalletWithTwoCurrencies(
+                    CurrencyType.Copper, CurrencyType.Silver, CurrencyType.Gold,
+                    copperTotalWorth, silverWorth, goldWorth);
 
             if (copperTotalWorth % goldWorth == 0)
-                conversions.Add(ConversionType.CopperToGold);
+                GetWalletWithOneCurrency(
+                    CurrencyType.Copper, CurrencyType.Gold,
+                    copperTotalWorth, goldWorth);
             else if (copperTotalWorth % goldWorth % silverWorth == 0)
-                conversions.Add(ConversionType.CopperToGoldSilver);
+                GetWalletWithTwoCurrencies(
+                    CurrencyType.Copper, CurrencyType.Gold, CurrencyType.Silver,
+                    copperTotalWorth, goldWorth, silverWorth);
 
             if (silverTotalWorth % copperWorth == 0)
-                conversions.Add(ConversionType.SilverToCopper);
+                GetWalletWithOneCurrency(
+                    CurrencyType.Silver, CurrencyType.Copper,
+                    silverTotalWorth, copperWorth);
             else if (silverTotalWorth % copperWorth % goldWorth == 0)
-                conversions.Add(ConversionType.SilverToCopperGold);
+                GetWalletWithTwoCurrencies(
+                    CurrencyType.Silver, CurrencyType.Copper, CurrencyType.Gold,
+                    silverTotalWorth, copperWorth, goldWorth);
 
             if (silverTotalWorth % goldWorth == 0)
-                conversions.Add(ConversionType.SilverToGold);
+                GetWalletWithOneCurrency(
+                    CurrencyType.Silver, CurrencyType.Gold,
+                    silverTotalWorth, goldWorth);
             else if (silverTotalWorth % goldWorth % copperWorth == 0)
-                conversions.Add(ConversionType.SilverToGoldCopper);
+                GetWalletWithTwoCurrencies(
+                    CurrencyType.Silver, CurrencyType.Gold, CurrencyType.Copper,
+                    silverTotalWorth, goldWorth, copperWorth);
 
             if (goldTotalWorth % copperWorth == 0)
-                conversions.Add(ConversionType.GoldToCopper);
+                GetWalletWithOneCurrency(
+                    CurrencyType.Gold, CurrencyType.Copper,
+                    goldTotalWorth, copperWorth);
             else if (goldTotalWorth % copperWorth % silverWorth == 0)
-                conversions.Add(ConversionType.GoldToCopperSilver);
+                GetWalletWithTwoCurrencies(
+                    CurrencyType.Gold, CurrencyType.Copper, CurrencyType.Silver,
+                    goldTotalWorth, copperWorth, silverWorth);
 
             if (goldTotalWorth % silverWorth == 0)
-                conversions.Add(ConversionType.GoldToSilver);
+                GetWalletWithOneCurrency(
+                    CurrencyType.Gold, CurrencyType.Silver,
+                    goldTotalWorth, silverWorth);
             else if (goldTotalWorth % silverWorth % copperWorth == 0)
-                conversions.Add(ConversionType.GoldToSilverCopper);
+                GetWalletWithTwoCurrencies(
+                    CurrencyType.Gold, CurrencyType.Silver, CurrencyType.Copper,
+                    goldTotalWorth, silverWorth, copperWorth);
 
-            return conversions;
-        }
+            return wallets;
 
-        void Convert(Dictionary<CurrencyType, int> result,
-            ConversionType conversionPath,
-            int totalCopperWorth, int totalSilverWorth, int totalGoldWorth,
-            int copperWorth, int silverWorth, int goldWorth)
-        {
-            switch (conversionPath)
+            void GetWalletWithOneCurrency(
+                CurrencyType fromCurrencyType, CurrencyType toCurrencyType,
+                int fromTotalWorth, int toWorth)
             {
-                case ConversionType.CopperToSilverGold:
-                    result[CurrencyType.Copper] = 0;
-                    result[CurrencyType.Silver] += totalCopperWorth / silverWorth;
-                    result[CurrencyType.Gold] += totalCopperWorth % silverWorth / goldWorth;
-                    break;
-
-                case ConversionType.CopperToGoldSilver:
-                    result[CurrencyType.Copper] = 0;
-                    result[CurrencyType.Gold] += totalCopperWorth / goldWorth;
-                    result[CurrencyType.Silver] += totalCopperWorth % goldWorth / silverWorth;
-                    break;
-
-                case ConversionType.CopperToSilver:
-                    result[CurrencyType.Copper] = 0;
-                    result[CurrencyType.Silver] += totalCopperWorth / silverWorth;
-                    break;
-
-                case ConversionType.CopperToGold:
-                    result[CurrencyType.Copper] = 0;
-                    result[CurrencyType.Gold] += totalCopperWorth / goldWorth;
-                    break;
-
-                case ConversionType.SilverToCopperGold:
-                    result[CurrencyType.Silver] = 0;
-                    result[CurrencyType.Copper] += totalSilverWorth / copperWorth;
-                    result[CurrencyType.Gold] += totalSilverWorth % copperWorth / goldWorth;
-                    break;
-
-                case ConversionType.SilverToGoldCopper:
-                    result[CurrencyType.Silver] = 0;
-                    result[CurrencyType.Gold] += totalSilverWorth / goldWorth;
-                    result[CurrencyType.Copper] += totalSilverWorth % goldWorth / copperWorth;
-                    break;
-
-                case ConversionType.SilverToCopper:
-                    result[CurrencyType.Silver] = 0;
-                    result[CurrencyType.Copper] += totalSilverWorth / copperWorth;
-                    break;
-
-                case ConversionType.SilverToGold:
-                    result[CurrencyType.Silver] = 0;
-                    result[CurrencyType.Gold] += totalSilverWorth / goldWorth;
-                    break;
-
-                case ConversionType.GoldToCopperSilver:
-                    result[CurrencyType.Gold] = 0;
-                    result[CurrencyType.Copper] += totalGoldWorth / copperWorth;
-                    result[CurrencyType.Silver] += totalGoldWorth % copperWorth / silverWorth;
-                    break;
-
-                case ConversionType.GoldToSilverCopper:
-                    result[CurrencyType.Gold] = 0;
-                    result[CurrencyType.Silver] += totalGoldWorth / silverWorth;
-                    result[CurrencyType.Copper] += totalGoldWorth % silverWorth / copperWorth;
-                    break;
-
-                case ConversionType.GoldToCopper:
-                    result[CurrencyType.Gold] = 0;
-                    result[CurrencyType.Copper] += totalGoldWorth / copperWorth;
-                    break;
-
-                case ConversionType.GoldToSilver:
-                    result[CurrencyType.Gold] = 0;
-                    result[CurrencyType.Silver] += totalGoldWorth / silverWorth;
-                    break;
+                Dictionary<CurrencyType, int> copy = wallet.GetCopy();
+                copy[fromCurrencyType] = 0;
+                copy[toCurrencyType] += fromTotalWorth / toWorth;
+                wallets.Add(copy);
             }
-        }
 
-        enum ConversionType : byte
-        {
-            None = 0,
-
-            CopperToSilverGold = 1,
-            CopperToGoldSilver = 2,
-            CopperToSilver = 3,
-            CopperToGold = 4,
-
-            SilverToCopperGold = 5,
-            SilverToGoldCopper = 6,
-            SilverToCopper = 7,
-            SilverToGold = 8,
-
-            GoldToCopperSilver = 10,
-            GoldToSilverCopper = 11,
-            GoldToCopper = 12,
-            GoldToSilver = 13,
+            void GetWalletWithTwoCurrencies(
+                CurrencyType fromCurrencyType,
+                CurrencyType toCurrencyType1, CurrencyType toCurrencyType2,
+                int fromTotalWorth, int toWorth1, int toWorth2)
+            {
+                Dictionary<CurrencyType, int> copy = wallet.GetCopy();
+                copy[fromCurrencyType] = 0;
+                copy[toCurrencyType1] += fromTotalWorth / toWorth1;
+                copy[toCurrencyType2] += fromTotalWorth % toWorth1 / toWorth2;
+                wallets.Add(copy);
+            }
         }
     }
 }
