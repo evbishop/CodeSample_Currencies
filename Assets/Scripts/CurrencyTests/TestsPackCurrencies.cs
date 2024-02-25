@@ -357,5 +357,221 @@ namespace CodeSample_Currency.CurrencyTests
             Assert.IsTrue(Run(wallet, nameof(Pack_Copper_Silver_3),
                 expectedResult1, expectedResult2, expectedResult3, expectedResult4));
         }
+
+        [Test]
+        public void Pack_Copper_Gold_2()
+        {
+            Dictionary<CurrencyType, int> wallet = new()
+            {
+                { CurrencyType.Copper, 20 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 20 },
+            };
+
+            Dictionary<CurrencyType, int> expectedResult1 = new()
+            {
+                { CurrencyType.Copper, 20 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 20 },
+            };
+            Dictionary<CurrencyType, int> expectedResult2 = new()
+            {
+                { CurrencyType.Copper, 0 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 24 },
+            };
+            Dictionary<CurrencyType, int> expectedResult3 = new()
+            {
+                { CurrencyType.Copper, 120 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 0 },
+            };
+            Dictionary<CurrencyType, int> expectedResult4 = new()
+            {
+                { CurrencyType.Copper, 21 },
+                { CurrencyType.Silver, 33 },
+                { CurrencyType.Gold, 0 },
+            };
+
+            Assert.IsTrue(Run(wallet, nameof(Pack_Copper_Gold_2),
+                expectedResult1, expectedResult2, expectedResult3, expectedResult4));
+        }
+
+        [Test]
+        public void Pack_Copper_Gold_3()
+        {
+            Dictionary<CurrencyType, int> wallet = new()
+            {
+                { CurrencyType.Copper, 23 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 23 },
+            };
+
+            Dictionary<CurrencyType, int> expectedResult1 = new()
+            {
+                { CurrencyType.Copper, 23 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 23 },
+            };
+            Dictionary<CurrencyType, int> expectedResult2 = new()
+            {
+                { CurrencyType.Copper, 0 },
+                { CurrencyType.Silver, 1 },
+                { CurrencyType.Gold, 27 },
+            };
+            Dictionary<CurrencyType, int> expectedResult3 = new()
+            {
+                { CurrencyType.Copper, 138 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 0 },
+            };
+            Dictionary<CurrencyType, int> expectedResult4 = new()
+            {
+                { CurrencyType.Copper, 24 },
+                { CurrencyType.Silver, 38 },
+                { CurrencyType.Gold, 0 },
+            };
+
+            Assert.IsTrue(Run(wallet, nameof(Pack_Copper_Gold_3),
+                expectedResult1, expectedResult2, expectedResult3, expectedResult4));
+        }
+
+        [Test]
+        public void Pack_Silver_Gold_2()
+        {
+            Dictionary<CurrencyType, int> wallet = new()
+            {
+                { CurrencyType.Copper, 0 },
+                { CurrencyType.Silver, 20 },
+                { CurrencyType.Gold, 20 },
+            };
+
+            Dictionary<CurrencyType, int> expectedResult1 = new()
+            {
+                { CurrencyType.Copper, 0 },
+                { CurrencyType.Silver, 20 },
+                { CurrencyType.Gold, 20 },
+            };
+            Dictionary<CurrencyType, int> expectedResult2 = new()
+            {
+                { CurrencyType.Copper, 60 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 20 },
+            };
+            Dictionary<CurrencyType, int> expectedResult3 = new()
+            {
+                { CurrencyType.Copper, 0 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 32 },
+            };
+            Dictionary<CurrencyType, int> expectedResult4 = new()
+            {
+                { CurrencyType.Copper, 100 },
+                { CurrencyType.Silver, 20 },
+                { CurrencyType.Gold, 0 },
+            };
+            Dictionary<CurrencyType, int> expectedResult5 = new()
+            {
+                { CurrencyType.Copper, 1 },
+                { CurrencyType.Silver, 53 },
+                { CurrencyType.Gold, 0 },
+            };
+
+            Assert.IsTrue(Run(wallet, nameof(Pack_Silver_Gold_2),
+                expectedResult1, expectedResult2, expectedResult3, expectedResult4,
+                expectedResult5));
+        }
+
+        [Test]
+        public void Pack_Silver_Gold_3()
+        {
+            Dictionary<CurrencyType, int> wallet = new()
+            {
+                { CurrencyType.Copper, 0 },
+                { CurrencyType.Silver, 23 },
+                { CurrencyType.Gold, 23 },
+            };
+
+            Dictionary<CurrencyType, int> expectedResult1 = new()
+            {
+                { CurrencyType.Copper, 0 },
+                { CurrencyType.Silver, 23 },
+                { CurrencyType.Gold, 23 },
+            };
+            Dictionary<CurrencyType, int> expectedResult2 = new()
+            {
+                { CurrencyType.Copper, 69 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 23 },
+            };
+            Dictionary<CurrencyType, int> expectedResult3 = new()
+            {
+                { CurrencyType.Copper, 4 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 36 },
+            };
+            Dictionary<CurrencyType, int> expectedResult4 = new()
+            {
+                { CurrencyType.Copper, 115 },
+                { CurrencyType.Silver, 23 },
+                { CurrencyType.Gold, 0 },
+            };
+            Dictionary<CurrencyType, int> expectedResult5 = new()
+            {
+                { CurrencyType.Copper, 1 },
+                { CurrencyType.Silver, 61 },
+                { CurrencyType.Gold, 0 },
+            };
+
+            Assert.IsTrue(Run(wallet, nameof(Pack_Silver_Gold_3),
+                expectedResult1, expectedResult2, expectedResult3, expectedResult4,
+                expectedResult5));
+        }
+
+        [Test]
+        public void Pack_All()
+        {
+            Dictionary<CurrencyType, int> wallet = new()
+            {
+                { CurrencyType.Copper, 100 },
+                { CurrencyType.Silver, 100 },
+                { CurrencyType.Gold, 100 },
+            };
+
+            Dictionary<CurrencyType, int> expectedResult1 = new()
+            {
+                { CurrencyType.Copper, 0 },
+                { CurrencyType.Silver, 100 },
+                { CurrencyType.Gold, 120 },
+            };
+            Dictionary<CurrencyType, int> expectedResult2 = new()
+            {
+                { CurrencyType.Copper, 400 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 100 },
+            };
+            Dictionary<CurrencyType, int> expectedResult3 = new()
+            {
+                { CurrencyType.Copper, 100 },
+                { CurrencyType.Silver, 0 },
+                { CurrencyType.Gold, 160 },
+            };
+            Dictionary<CurrencyType, int> expectedResult4 = new()
+            {
+                { CurrencyType.Copper, 600 },
+                { CurrencyType.Silver, 100 },
+                { CurrencyType.Gold, 0 },
+            };
+            Dictionary<CurrencyType, int> expectedResult5 = new()
+            {
+                { CurrencyType.Copper, 102 },
+                { CurrencyType.Silver, 266 },
+                { CurrencyType.Gold, 0 },
+            };
+
+            Assert.IsTrue(Run(wallet, nameof(Pack_All),
+                expectedResult1, expectedResult2, expectedResult3, expectedResult4,
+                expectedResult5));
+        }
     }
 }
