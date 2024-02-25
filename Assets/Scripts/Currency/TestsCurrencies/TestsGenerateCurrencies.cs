@@ -1,75 +1,46 @@
-﻿using CodeSample_Currencies.Currency;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-namespace CodeSample_Currencies.TestsCurrencies
+namespace CodeSample_Currencies.Currency.TestsCurrencies
 {
     public class TestsGenerateCurrencies : TestsCurrencies
     {
         bool Run(int maxCurrenciesToGenerate, int worth, string caller,
             params Dictionary<CurrencyType, int>[] expectedResults)
         {
-            bool isPassingAll = true;
-            int iterations = 10000;
-            HashSet<Dictionary<CurrencyType, int>> unachievedResults = expectedResults.ToHashSet();
-            Dictionary<string, int> resultCounts = new();
-
-            for (int i = 0; i < iterations; i++)
+            Func<Dictionary<CurrencyType, int>> getActualResult = () =>
             {
-                Dictionary<CurrencyType, int> actualResult;
+                return GetActualResult(maxCurrenciesToGenerate, worth);
+            };
 
-                if (maxCurrenciesToGenerate == 1)
-                {
-                    actualResult = helper.GetMoneyInRandomCurrency(
-                        currenciesWorth,
-                        worth);
-                }
-                else if (maxCurrenciesToGenerate == 2)
-                {
-                    actualResult = helper.GetMoneyInRandomCurrencies(
-                        currenciesWorth,
-                        worth,
-                        true);
-                }
-                else
-                {
-                    Debug.LogWarning($"No code to test generation of {maxCurrenciesToGenerate} currencies");
-                    return false;
-                }
+            return Run(getActualResult, caller, expectedResults);
+        }
 
-                var matchingResult = expectedResults
-                    .FirstOrDefault(expectedResult =>
-                        expectedResult.IsEqualByValues(actualResult));
+        Dictionary<CurrencyType, int> GetActualResult(int maxCurrenciesToGenerate, int worth)
+        {
+            Dictionary<CurrencyType, int> actualResult = null;
 
-                if (matchingResult is null)
-                {
-                    isPassingAll = false;
-                    PrintDebug(actualResult, caller, true);
-                }
-                else
-                {
-                    var unachievedResult = unachievedResults
-                        .FirstOrDefault(result =>
-                            result.IsEqualByValues(actualResult));
-                    if (unachievedResult is not null)
-                        unachievedResults.Remove(unachievedResult);
-
-                    string matchingResultString = matchingResult.ToWalletString();
-                    if (resultCounts.ContainsKey(matchingResultString))
-                        resultCounts[matchingResultString] += 1;
-                    else
-                        resultCounts.Add(matchingResultString, 1);
-                }
+            if (maxCurrenciesToGenerate == 1)
+            {
+                actualResult = helper.GetMoneyInRandomCurrency(
+                    currenciesWorth,
+                    worth);
+            }
+            else if (maxCurrenciesToGenerate == 2)
+            {
+                actualResult = helper.GetMoneyInRandomCurrencies(
+                    currenciesWorth,
+                    worth,
+                    true);
+            }
+            else
+            {
+                Debug.LogWarning($"No code to test generation of {maxCurrenciesToGenerate} currencies");
             }
 
-            PrintDebug(resultCounts, iterations);
-
-            foreach (var result in unachievedResults)
-                PrintDebug(result, caller, false);
-
-            return isPassingAll;
+            return actualResult;
         }
 
         #region Generate money in a single currency

@@ -1,57 +1,20 @@
-using CodeSample_Currencies.Currency;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace CodeSample_Currencies.TestsCurrencies
+namespace CodeSample_Currencies.Currency.TestsCurrencies
 {
     public class TestsPackCurrencies : TestsCurrencies
     {
         bool Run(Dictionary<CurrencyType, int> wallet, string caller,
             params Dictionary<CurrencyType, int>[] expectedResults)
         {
-            bool isPassingAll = true;
-            int iterations = 10000;
-            HashSet<Dictionary<CurrencyType, int>> unachievedResults = expectedResults.ToHashSet();
-            Dictionary<string, int> resultCounts = new();
-
-            for (int i = 0; i < iterations; i++)
+            Func<Dictionary<CurrencyType, int>> getActualResult = () =>
             {
-                Dictionary<CurrencyType, int> actualResult;
+                return helper.PackTreeCurrenciesIntoTwo(wallet, currenciesWorth);
+            };
 
-                actualResult = helper.PackTreeCurrenciesIntoTwo(wallet, currenciesWorth);
-
-                var matchingResult = expectedResults
-                    .FirstOrDefault(expectedResult =>
-                        expectedResult.IsEqualByValues(actualResult));
-
-                if (matchingResult is null)
-                {
-                    isPassingAll = false;
-                    PrintDebug(actualResult, caller, true);
-                }
-                else
-                {
-                    var unachievedResult = unachievedResults
-                        .FirstOrDefault(result =>
-                            result.IsEqualByValues(actualResult));
-                    if (unachievedResult is not null)
-                        unachievedResults.Remove(unachievedResult);
-
-                    string matchingResultString = matchingResult.ToWalletString();
-                    if (resultCounts.ContainsKey(matchingResultString))
-                        resultCounts[matchingResultString] += 1;
-                    else
-                        resultCounts.Add(matchingResultString, 1);
-                }
-            }
-
-            PrintDebug(resultCounts, iterations);
-
-            foreach (var result in unachievedResults)
-                PrintDebug(result, caller, false);
-
-            return isPassingAll;
+            return Run(getActualResult, caller, expectedResults);
         }
 
         [Test]
