@@ -140,105 +140,81 @@ namespace CodeSample_Currencies.Currency
             in Dictionary<CurrencyType, int> wallet,
             in Dictionary<CurrencyType, int> currenciesWorth)
         {
-            int copperWorth = currenciesWorth[CurrencyType.Copper];
-            int silverWorth = currenciesWorth[CurrencyType.Silver];
-            int goldWorth = currenciesWorth[CurrencyType.Gold];
+            CurrencyType copperType = CurrencyType.Copper;
+            CurrencyType silverType = CurrencyType.Silver;
+            CurrencyType goldType = CurrencyType.Gold;
 
-            int totalCopperWorth = copperWorth * wallet[CurrencyType.Copper];
-            int totalSilverWorth = silverWorth * wallet[CurrencyType.Silver];
-            int totalGoldWorth = goldWorth * wallet[CurrencyType.Gold];
+            CurrencyData copperData = new CurrencyData(
+                copperType,
+                currenciesWorth[copperType],
+                currenciesWorth[copperType] * wallet[copperType]);
+            CurrencyData silverData = new CurrencyData(
+                silverType,
+                currenciesWorth[silverType],
+                currenciesWorth[silverType] * wallet[silverType]);
+            CurrencyData goldData = new CurrencyData(
+                goldType,
+                currenciesWorth[goldType],
+                currenciesWorth[goldType] * wallet[goldType]);
 
             List<Dictionary<CurrencyType, int>> possibleResults = GetPossibleConversions(
-                wallet,
-                totalCopperWorth, totalSilverWorth, totalGoldWorth,
-                copperWorth, silverWorth, goldWorth);
+                wallet, copperData, silverData, goldData);
 
             return possibleResults[Random.Range(0, possibleResults.Count)];
         }
 
         List<Dictionary<CurrencyType, int>> GetPossibleConversions(
             Dictionary<CurrencyType, int> wallet,
-            int copperTotalWorth, int silverTotalWorth, int goldTotalWorth,
-            int copperWorth, int silverWorth, int goldWorth)
+            params CurrencyData[] currencies)
         {
             List<Dictionary<CurrencyType, int>> wallets = new();
 
-            if (copperTotalWorth % silverWorth == 0)
-                GetWalletWithOneCurrency(
-                    CurrencyType.Copper, CurrencyType.Silver,
-                    copperTotalWorth, silverWorth);
-            else if (copperTotalWorth % silverWorth % goldWorth == 0)
-                GetWalletWithTwoCurrencies(
-                    CurrencyType.Copper, CurrencyType.Silver, CurrencyType.Gold,
-                    copperTotalWorth, silverWorth, goldWorth);
-
-            if (copperTotalWorth % goldWorth == 0)
-                GetWalletWithOneCurrency(
-                    CurrencyType.Copper, CurrencyType.Gold,
-                    copperTotalWorth, goldWorth);
-            else if (copperTotalWorth % goldWorth % silverWorth == 0)
-                GetWalletWithTwoCurrencies(
-                    CurrencyType.Copper, CurrencyType.Gold, CurrencyType.Silver,
-                    copperTotalWorth, goldWorth, silverWorth);
-
-            if (silverTotalWorth % copperWorth == 0)
-                GetWalletWithOneCurrency(
-                    CurrencyType.Silver, CurrencyType.Copper,
-                    silverTotalWorth, copperWorth);
-            else if (silverTotalWorth % copperWorth % goldWorth == 0)
-                GetWalletWithTwoCurrencies(
-                    CurrencyType.Silver, CurrencyType.Copper, CurrencyType.Gold,
-                    silverTotalWorth, copperWorth, goldWorth);
-
-            if (silverTotalWorth % goldWorth == 0)
-                GetWalletWithOneCurrency(
-                    CurrencyType.Silver, CurrencyType.Gold,
-                    silverTotalWorth, goldWorth);
-            else if (silverTotalWorth % goldWorth % copperWorth == 0)
-                GetWalletWithTwoCurrencies(
-                    CurrencyType.Silver, CurrencyType.Gold, CurrencyType.Copper,
-                    silverTotalWorth, goldWorth, copperWorth);
-
-            if (goldTotalWorth % copperWorth == 0)
-                GetWalletWithOneCurrency(
-                    CurrencyType.Gold, CurrencyType.Copper,
-                    goldTotalWorth, copperWorth);
-            else if (goldTotalWorth % copperWorth % silverWorth == 0)
-                GetWalletWithTwoCurrencies(
-                    CurrencyType.Gold, CurrencyType.Copper, CurrencyType.Silver,
-                    goldTotalWorth, copperWorth, silverWorth);
-
-            if (goldTotalWorth % silverWorth == 0)
-                GetWalletWithOneCurrency(
-                    CurrencyType.Gold, CurrencyType.Silver,
-                    goldTotalWorth, silverWorth);
-            else if (goldTotalWorth % silverWorth % copperWorth == 0)
-                GetWalletWithTwoCurrencies(
-                    CurrencyType.Gold, CurrencyType.Silver, CurrencyType.Copper,
-                    goldTotalWorth, silverWorth, copperWorth);
-
-            return wallets;
-
-            void GetWalletWithOneCurrency(
-                CurrencyType fromCurrencyType, CurrencyType toCurrencyType,
-                int fromTotalWorth, int toWorth)
+            for (int i = 0; i < currencies.Length; i++)
             {
-                Dictionary<CurrencyType, int> copy = wallet.GetCopy();
-                copy[fromCurrencyType] = 0;
-                copy[toCurrencyType] += fromTotalWorth / toWorth;
-                wallets.Add(copy);
+                CurrencyData currencyFrom = currencies[i];
+                for (int j = 0; j < currencies.Length; j++)
+                {
+                    if (j == i)
+                        continue;
+                    CurrencyData currencyTo1 = currencies[j];
+                    for (int k = 0; k < currencies.Length; k++)
+                    {
+                        if (k == i || k == j)
+                            continue;
+                        CurrencyData currencyTo2 = currencies[k];
+                        if (currencyFrom.TotalWorth % currencyTo1.Worth == 0)
+                        {
+                            Dictionary<CurrencyType, int> copy = wallet.GetCopy();
+                            copy[currencyFrom.CurrencyType] = 0;
+                            copy[currencyTo1.CurrencyType] += currencyFrom.TotalWorth / currencyTo1.Worth;
+                            wallets.Add(copy);
+                        }
+                        else if (currencyFrom.TotalWorth % currencyTo1.Worth % currencyTo2.Worth == 0)
+                        {
+                            Dictionary<CurrencyType, int> copy = wallet.GetCopy();
+                            copy[currencyFrom.CurrencyType] = 0;
+                            copy[currencyTo1.CurrencyType] += currencyFrom.TotalWorth / currencyTo1.Worth;
+                            copy[currencyTo2.CurrencyType] += currencyFrom.TotalWorth % currencyTo1.Worth / currencyTo2.Worth;
+                            wallets.Add(copy);
+                        }
+                    }
+                }
             }
 
-            void GetWalletWithTwoCurrencies(
-                CurrencyType fromCurrencyType,
-                CurrencyType toCurrencyType1, CurrencyType toCurrencyType2,
-                int fromTotalWorth, int toWorth1, int toWorth2)
+            return wallets;
+        }
+
+        struct CurrencyData
+        {
+            public CurrencyType CurrencyType;
+            public int Worth;
+            public int TotalWorth;
+
+            public CurrencyData(CurrencyType currencyType, int worth, int totalWorth)
             {
-                Dictionary<CurrencyType, int> copy = wallet.GetCopy();
-                copy[fromCurrencyType] = 0;
-                copy[toCurrencyType1] += fromTotalWorth / toWorth1;
-                copy[toCurrencyType2] += fromTotalWorth % toWorth1 / toWorth2;
-                wallets.Add(copy);
+                CurrencyType = currencyType;
+                Worth = worth;
+                TotalWorth = totalWorth;
             }
         }
     }
