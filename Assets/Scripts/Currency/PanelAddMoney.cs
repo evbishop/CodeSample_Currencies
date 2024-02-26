@@ -1,20 +1,19 @@
-using CodeSample_Currencies.Currency;
 using Doozy.Runtime.Common.Extensions;
 using Doozy.Runtime.UIManager.Components;
 using Doozy.Runtime.UIManager.Containers;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 
-namespace CodeSample_Currencies
+namespace CodeSample_Currencies.Currency
 {
     public class PanelAddMoney : MonoBehaviour
     {
-        [SerializeField] TMP_InputField inputFieldMoneyToAdd;
-        [SerializeField] TMP_Text textPlaceholderInputFieldMoneyToAdd;
-        [SerializeField] TMP_Text textCurrenciesQuantityInfo;
-        [SerializeField] UIStepper stepperCurrenciesQuantity;
-        [SerializeField] UIContainer containerCurrencySelection;
-        [SerializeField] UIToggleGroup toggleGroupCurrencyTypes;
+        [SerializeField, ChildGameObjectsOnly] TMP_InputField inputFieldMoneyToAdd;
+        [SerializeField, ChildGameObjectsOnly] TMP_Text textPlaceholderInputFieldMoneyToAdd;
+        [SerializeField, ChildGameObjectsOnly] UIStepper stepperCurrenciesQuantity;
+        [SerializeField, ChildGameObjectsOnly] UIContainer containerCurrencySelection;
+        [SerializeField, ChildGameObjectsOnly] UIToggleGroup toggleGroupCurrencyTypes;
 
         // Called from Button - Add Money
         public void AddMoney()

@@ -1,5 +1,6 @@
 ﻿using CodeSample_Currencies.Utility;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CodeSample_Currencies.Currency
 {
@@ -55,6 +56,9 @@ namespace CodeSample_Currencies.Currency
 
         public void RemoveCurrencies(Dictionary<CurrencyType, int> currenciesToRemove)
         {
+            if (currenciesToRemove.Any(currency => currency.Value > Wallet[currency.Key]))
+                return;
+
             foreach (var (currencyType, quantity) in currenciesToRemove)
             {
                 Wallet[currencyType] -= quantity;
