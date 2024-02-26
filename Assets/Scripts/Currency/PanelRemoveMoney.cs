@@ -1,3 +1,4 @@
+using CodeSample_Currencies.Utility;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using TMPro;
@@ -22,7 +23,8 @@ namespace CodeSample_Currencies.Currency
             if (inputFieldGoldCoinsToRemove.text != "")
                 currenciesToRemove.Add(CurrencyType.Gold, int.Parse(inputFieldGoldCoinsToRemove.text));
 
-            CurrencyHandler.Instance.RemoveCurrencies(currenciesToRemove);
+            if (!CurrencyHandler.Instance.TryRemoveCurrencies(currenciesToRemove))
+                PopupHelper.Instance.ShowErrorPopup(PopupDesignation.ErrorNotEnoughMoney);
         }
     }
 }

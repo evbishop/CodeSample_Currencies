@@ -54,10 +54,10 @@ namespace CodeSample_Currencies.Currency
             OnWalletUpdated?.Invoke(currencyType, Wallet[currencyType], true);
         }
 
-        public void RemoveCurrencies(Dictionary<CurrencyType, int> currenciesToRemove)
+        public bool TryRemoveCurrencies(Dictionary<CurrencyType, int> currenciesToRemove)
         {
             if (currenciesToRemove.Any(currency => currency.Value > Wallet[currency.Key]))
-                return;
+                return false;
 
             foreach (var (currencyType, quantity) in currenciesToRemove)
             {
@@ -65,6 +65,7 @@ namespace CodeSample_Currencies.Currency
 
                 OnWalletUpdated?.Invoke(currencyType, Wallet[currencyType], false);
             }
+            return true;
         }
     }
 }

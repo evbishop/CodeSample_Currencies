@@ -34,6 +34,8 @@ namespace CodeSample_Currencies.Currency
         [field: SerializeField] public int CurrencyRemainderIgnoreThreshold { get; private set; } = 2;
         [field: SerializeField] public Dictionary<CurrencyType, CurrencyInfo> CurrencyInfos { get; private set; }
 
+        public void Init() { }
+
         public Dictionary<CurrencyType, int> GetEmptyWallet()
         {
             Dictionary<CurrencyType, int> result = new();
