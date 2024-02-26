@@ -11,9 +11,11 @@ namespace CodeSample_Currencies.Currency
         [SerializeField] CurrencyType currencyType;
         [SerializeField] Image currencyImage;
         [SerializeField] TMP_Text currencyText;
-        [SerializeField] DOTweenAnimation currencyAnimation;
+        [SerializeField] DOTweenAnimation currencyAnimation; // doing this animation with DOTween
+                                                             // rather than Doozy just to show that
+                                                             // I can do both
 
-        void Awake()
+        void Start()
         {
             currencyImage.sprite = CurrencyHelper.Instance.CurrencyInfos[currencyType].Sprite;
             CurrencyHandler.Instance.OnWalletUpdated += HandleCurrencyUpdated;

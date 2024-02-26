@@ -1,15 +1,20 @@
 using CodeSample_Currencies.Currency;
-using System;
+using Doozy.Runtime.Common.Extensions;
+using Doozy.Runtime.UIManager.Components;
+using Doozy.Runtime.UIManager.Containers;
 using TMPro;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace CodeSample_Currencies
 {
     public class PanelAddMoney : MonoBehaviour
     {
         [SerializeField] TMP_InputField inputFieldMoneyToAdd;
-        [SerializeField] TMP_InputField inputFieldCurrenciesQuantity;
+        [SerializeField] TMP_Text textPlaceholderInputFieldMoneyToAdd;
+        [SerializeField] TMP_Text textCurrenciesQuantityInfo;
+        [SerializeField] UIStepper stepperCurrenciesQuantity;
+        [SerializeField] UIContainer containerCurrencySelection;
+        [SerializeField] UIToggleGroup toggleGroupCurrencyTypes;
 
         // Called from Button - Add Money
         public void AddMoney()
@@ -18,31 +23,38 @@ namespace CodeSample_Currencies
             if (inputFieldMoneyToAdd.text != "")
                 money = int.Parse(inputFieldMoneyToAdd.text);
 
-            int currenciesQuantity = 1;
-            if (inputFieldCurrenciesQuantity.text != "")
-                currenciesQuantity = int.Parse(inputFieldCurrenciesQuantity.text);
-            if (currenciesQuantity < 1)
+            if (stepperCurrenciesQuantity.value == 1)
             {
-                print("Setting the minimum currencies quantity to add");
-                currenciesQuantity = 1;
-            }
-            else if (currenciesQuantity > CurrencyHelper.Instance.CurrencyInfos.Count)
-            {
-                print("Setting the maximum currencies quantity to add");
-                currenciesQuantity = CurrencyHelper.Instance.CurrencyInfos.Count;
-            }
-            inputFieldCurrenciesQuantity.text = currenciesQuantity.ToString();
-
-            if (currenciesQuantity == 1)
-            {
-                CurrencyType randomType = (CurrencyType)Random.Range(
-                    1,
-                    Enum.GetNames(typeof(CurrencyType)).Length);
-                CurrencyHandler.Instance.AddCurrency(randomType, money);
+                if (toggleGroupCurrencyTypes.firstToggleOn.TryGetComponent<CurrencyTag>(
+                    out var currencyTag))
+                {
+                    CurrencyHandler.Instance.AddCurrency(currencyTag.CurrencyType, money);
+                }
+                else
+                {
+                    Debug.LogError($"{toggleGroupCurrencyTypes.firstToggleOn.gameObject.name} is missing a CurrencyTag");
+                }
             }
             else
             {
-                CurrencyHandler.Instance.AddMoney(money, currenciesQuantity == 2);
+                CurrencyHandler.Instance.AddMoney(money, stepperCurrenciesQuantity.value == 2);
+            }
+        }
+
+        // Called from UIStepper OnValueChanged callback
+        public void HandleCurrenciesQuantityChanged()
+        {
+            if (stepperCurrenciesQuantity.value.Approximately(1))
+            {
+                containerCurrencySelection.Show();
+                inputFieldMoneyToAdd.text = "";
+                textPlaceholderInputFieldMoneyToAdd.text = "Enter coins quantity";
+            }
+            else
+            {
+                containerCurrencySelection.Hide();
+                inputFieldMoneyToAdd.text = "";
+                textPlaceholderInputFieldMoneyToAdd.text = "Enter total money worth amount";
             }
         }
     }
